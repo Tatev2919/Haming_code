@@ -2,42 +2,44 @@ module hamming_code(
 	clk,rst,data_in,data_out
 );
 
-input clk,rst;
-input [7:0] data_in;
-output [11:0] data_out;
+input             clk,rst;
+input      [15:0] data_in;
+output reg [20:0] data_out;
  
-reg [11:0] data_gen;
 reg [4:0] i,k;
-reg [2:0] m;
+reg [3:0] m;
+
 
 always @(rst or data_in) begin
 	if (rst) begin 
-		data_gen = 12'b0;
+		data_out = 12'b0;
 	end 
 	else begin
 		i = 5'b0;
 		m = 3'b0;	
 		k = 5'b0;
-		while (i < 5'd11 && k < 5'd8) begin 
+		while (i < 5'd20 && k < 5'd16) begin 
 			if(i == (2**m)-1) begin
-				data_gen[i] = 1'b0;
+				data_out[i] = 1'b0;
 				m = m + 3'b1;
 			end
 			else begin
-				data_gen[i] = data_in[k];
+				data_out[i] = data_in[k];
 				k = k + 5'b1;
 			end	
 			i = i + 5'b1;
 		end
 
-		if(^(data_gen & 12'b101010101010))  
-			data_gen[0] = ~data_gen[0];
-		if(^(data_gen & 12'b001100110011))  
-			data_gen[1] = ~data_gen[1];
-		if(^(data_gen & 12'b000111100001)) 
-			data_gen[3] = ~data_gen[3];
-		if(^(data_gen & 12'b000000001111)) 
-			data_gen[7] = ~data_gen[7];
+		if(^(data_out & {10{2'b10}}))  
+			data_out[0] = ~data_out[0];
+		if(^(data_out & 21'b001100110011001100110))  
+			data_out[1] = ~data_out[1];
+		if(^(data_out & 21'b110000111100001111000)) 
+			data_out[3] = ~data_out[3];
+		if(^(data_out & 21'b000000111111110000000)) 
+			data_out[7] = ~data_out[7];
+		if(^(data_out & 21'b111111000000000000000)) 
+			data_out[15] = ~data_out[15];
 	end 
 end
 

@@ -1,7 +1,7 @@
 module hamming_code_tb;
 	reg rst,clk;
-	reg [7:0] data_in;
-	wire [11:0] data_out;
+	reg [15:0] data_in;
+	wire [20:0] data_out;
 
 	hamming_code hc (clk,rst,data_in,data_out);
 	initial begin
@@ -14,7 +14,7 @@ module hamming_code_tb;
 		rst = 1;
 		#25;
 		rst = 0;
-		data_in = 8'd15;
+		data_in = 16'd15;
 		#5000;
 		$finish;
 	end
